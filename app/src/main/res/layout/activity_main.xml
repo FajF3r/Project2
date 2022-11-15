@@ -10,14 +10,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_marginTop="60dp"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_width="420dp"
         android:layout_height="400dp"
         app:srcCompat="@drawable/_60469" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/butName"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:background="@drawable/roundedbutton"
@@ -27,14 +27,23 @@
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"/>
 
-        <Switch
-            android:id="@+id/onOff"
-            android:theme="@style/Theme.MyTheme"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/butName"
-            android:layout_centerHorizontal="true"/>
+    <Switch
+        android:id="@+id/onOff"
+        android:theme="@style/Theme.MyTheme"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/butName"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/lokalizacjaText"
+        android:layout_below="@id/onOff"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 </RelativeLayout>
