@@ -4,12 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/navy">
 
 
     <ImageView
         android:id="@+id/imageView"
+        android:layout_marginTop="60dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         app:srcCompat="@drawable/_60469" />
+
+    <Button
+        android:id="@+id/butName"
+        android:layout_marginTop="50dp"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:background="@drawable/roundedbutton"
+        android:text="Wlacz"
+        android:textSize="25dp"
+        android:textColor="#222222"
+        android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>
