@@ -2,8 +2,14 @@ package com.barstool.project2;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,10 +17,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         img = findViewById(R.id.imageView);
         btn = findViewById(R.id.butName);
@@ -65,5 +75,54 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.INTERNET
+            }, 10 );
+            return;
+        }else{
+            DisplayGps();
+        }
+    }
+    private void DisplayGps() {
+        onOff.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onClick(View view) {
+                locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
+                if(onOff.isChecked())
+                    txt.setVisibility(View.VISIBLE);
+                else
+                    txt.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //permisje kamera
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                img.setEnabled(true);
+            } else {
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+                img.setEnabled(false);
+            }
+        }
+        //permisje lokalizacja
+        switch (requestCode) {
+            case 10:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    DisplayGps();
+                    Toast.makeText(this, "localisation permission granted", Toast.LENGTH_LONG).show();
+                    onOff.setEnabled(true);
+                }else{
+                    Toast.makeText(this, "localisation permission denied", Toast.LENGTH_LONG).show();
+                    img.setEnabled(false);
+                }
+                return;
+        }
     }
 }
