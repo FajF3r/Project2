@@ -85,6 +85,21 @@ public class MainActivity extends AppCompatActivity {
         }else{
             DisplayGps();
         }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                100);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+                } else {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, 1888);
+                }
+            }
+        });
     }
     private void DisplayGps() {
         onOff.setOnClickListener(new View.OnClickListener() {
@@ -100,18 +115,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //permisje kamera
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
-                img.setEnabled(true);
+                btn.setEnabled(true);
             } else {
                 Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
-                img.setEnabled(false);
+                btn.setEnabled(false);
             }
         }
-        //permisje lokalizacja
         switch (requestCode) {
             case 10:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -120,9 +133,17 @@ public class MainActivity extends AppCompatActivity {
                     onOff.setEnabled(true);
                 }else{
                     Toast.makeText(this, "localisation permission denied", Toast.LENGTH_LONG).show();
-                    img.setEnabled(false);
+                    btn.setEnabled(false);
                 }
                 return;
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            img.setImageBitmap(photo);
         }
     }
 }
